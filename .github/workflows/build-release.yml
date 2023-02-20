@@ -73,9 +73,9 @@ jobs:
       id: compileopenwrt
       run: |
         if [ "${{ matrix.model }}" = "nanopi-r5s" ]; then
-          bash <(curl -sS ${{ secrets.script_url_general }}) ${{ matrix.tag.type }} r5s
+          KERNEL_TESTING=1 bash <(curl -sS ${{ secrets.script_url_general }}) ${{ matrix.tag.type }} r5s
         else
-          bash <(curl -sS ${{ secrets.script_url_general }}) ${{ matrix.tag.type }}
+          KERNEL_TESTING=1 bash <(curl -sS ${{ secrets.script_url_general }}) ${{ matrix.tag.type }}
         fi
         cd openwrt
         tags=$(git describe --abbrev=0 --tags)
@@ -87,14 +87,15 @@ jobs:
         mkdir -p rom info
         if [ "${{ matrix.model }}" = "nanopi-r4s" ]; then
           cp -a openwrt/bin/targets/rockchip/armv8/*.img.gz rom/
-          cp -a openwrt/bin/targets/rockchip/armv8/*-r4s.manifest info/manifest.txt
+          cp -a openwrt/bin/targets/rockchip/armv8/*.manifest info/manifest.txt
           cp -a openwrt/bin/targets/rockchip/armv8/config.buildinfo info/config.buildinfo
           cd rom && sha256sum *gz > ../info/sha256sums.txt
         elif [ "${{ matrix.model }}" = "nanopi-r5s" ]; then
           cp -a openwrt/bin/targets/rockchip/armv8/*.img.gz rom/
-          cp -a openwrt/bin/targets/rockchip/armv8/*-r5s.manifest info/manifest.txt
+          cp -a openwrt/kmod-*.tar.gz rom/
+          cp -a openwrt/bin/targets/rockchip/armv8/*.manifest info/manifest.txt
           cp -a openwrt/bin/targets/rockchip/armv8/config.buildinfo info/config.buildinfo
-          cd rom && sha256sum *gz > ../info/sha256sums.txt
+          cd rom && sha256sum *img.gz > ../info/sha256sums.txt
         fi
 
     - name: Create release
