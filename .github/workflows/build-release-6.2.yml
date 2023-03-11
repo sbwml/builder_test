@@ -1,4 +1,4 @@
-name: Build releases
+name: Build releases - Linux 6.2
 
 on:
   watch:
@@ -99,7 +99,7 @@ jobs:
       id: create_release
       uses: ncipollo/release-action@v1.11.1
       with:
-        name: OpenWRT-${{ env.latest_release }}
+        name: OpenWrt-${{ env.latest_release }}-linux-6.2
         allowUpdates: true
         tag: ${{ env.latest_release }}
         commit: master
