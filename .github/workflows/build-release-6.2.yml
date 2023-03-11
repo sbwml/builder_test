@@ -101,7 +101,7 @@ jobs:
       with:
         name: OpenWrt-${{ env.latest_release }}-linux-6.2
         allowUpdates: true
-        tag: ${{ env.latest_release }}
+        tag: ${{ env.latest_release }}-6.2
         commit: master
         replacesArtifacts: true
         token: ${{ secrets.workflow_token }}
